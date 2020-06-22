@@ -2,7 +2,7 @@
  * @Author: Varandrew
  * @Date: 2020-06-18 13:07:14
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-06-18 16:56:42
+ * @LastEditTime: 2020-06-19 11:16:41
  * @Description: file content
  */
 
@@ -84,4 +84,27 @@ weget({
   method: 'post',
   url: '/base/buffer',
   data: arr
+})
+
+weget({
+  method: 'post',
+  url: '/base/post',
+  data: {
+    a: 1,
+    b: 2
+  }
+}).then(res => {
+  console.log(res)
+})
+
+weget({
+  method: 'post',
+  url: '/base/post',
+  responseType: 'json',
+  data: {
+    a: 3,
+    b: 4
+  }
+}).then(res => {
+  console.log(res)
 })

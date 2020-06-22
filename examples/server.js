@@ -2,7 +2,7 @@
  * @Author: Varandrew
  * @Date: 2020-04-17 15:06:31
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-06-18 17:00:55
+ * @LastEditTime: 2020-06-19 15:18:17
  * @Description: file content
  */
 
@@ -42,6 +42,25 @@ router.post('/base/buffer', function(req, res) {
     let buf = Buffer.concat(msg)
     res.json(buf.toJSON())
   })
+})
+
+router.get('/error/get', function(req, res) {
+  if (Math.random() > 0.5) {
+    res.json({
+      msg: `hello world`
+    })
+  } else {
+    res.status(500)
+    res.end()
+  }
+})
+
+router.get('/error/timeout', function(req, res) {
+  setTimeout(() => {
+    res.json({
+      msg: `hello world`
+    })
+  }, 3000)
 })
 
 app.use(router)

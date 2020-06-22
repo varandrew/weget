@@ -2,7 +2,7 @@
  * @Author: Varandrew
  * @Date: 2020-02-29 12:02:10
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-06-19 09:27:31
+ * @LastEditTime: 2020-06-22 10:49:55
  * @Description: file content
  */
 
@@ -14,6 +14,8 @@ export interface WegetRequesetConfig {
   data?: any
   params?: any
   headers?: any
+  responseType?: XMLHttpRequestResponseType
+  timeout?: number
 }
 
 export interface WegetResponse {
@@ -23,4 +25,14 @@ export interface WegetResponse {
   headers: any
   config: WegetRequesetConfig
   request: any
+}
+
+export interface WegetPromise extends Promise<WegetResponse> {}
+
+export interface WegetError extends Error {
+  config: WegetRequesetConfig
+  code?: string
+  request?: any
+  response?: WegetResponse
+  isWegetError: boolean
 }

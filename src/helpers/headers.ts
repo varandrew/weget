@@ -2,7 +2,7 @@
  * @Author: Varandrew
  * @Date: 2020-06-18 17:13:29
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-06-18 17:27:27
+ * @LastEditTime: 2020-06-19 11:27:59
  * @Description: file content
  */
 
@@ -29,4 +29,21 @@ export function processHeaders(headers: any, data: any): any {
   }
 
   return headers
+}
+
+export function parseHeaders(headers: string): any {
+  let parsed = Object.create(null)
+  if (!headers) return parsed
+
+  headers.split('\r\n').forEach(line => {
+    let [key, val] = line.split(':')
+    key = key.trim().toLowerCase()
+    if (!key) return
+    if (val) {
+      val = val.trim()
+    }
+    parsed[key] = val
+  })
+
+  return parsed
 }

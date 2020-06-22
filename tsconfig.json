@@ -19,7 +19,8 @@
       "@/utils/*": ["utils/*"],
       "@/types/*": ["types/*"],
       "@/setting/*": ["setting/*"],
-      "@/constants/*": ["constants/*"]
+      "@/constants/*": ["constants/*"],
+      "@/helpers/*": ["helpers/*"]
     }
   },
   "include": ["src"]
