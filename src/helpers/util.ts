@@ -2,7 +2,7 @@
  * @Author: Varandrew
  * @Date: 2020-05-29 11:46:52
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-06-19 16:58:40
+ * @LastEditTime: 2020-06-22 17:49:00
  * @Description: file content
  */
 
@@ -18,4 +18,11 @@ export function isObject(val: any): val is Object {
 
 export function isPlainObject(val: any): val is Object {
   return toString.call(val) === '[object Object]'
+}
+
+export function extend<T, U>(to: T, from: U): T & U {
+  for (const key in from) {
+    ;(to as T & U)[key] = from[key] as any
+  }
+  return to as T & U
 }

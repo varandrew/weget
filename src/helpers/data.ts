@@ -2,7 +2,7 @@
  * @Author: Varandrew
  * @Date: 2020-06-18 16:34:09
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-06-19 11:33:22
+ * @LastEditTime: 2020-06-23 16:04:43
  * @Description: file content
  */
 
@@ -17,9 +17,8 @@ export function parseResponse(data: any): any {
     try {
       data = JSON.parse(data)
     } catch (e) {
-      // do noting
+      // do nothing
     }
   }
-
   return data
 }

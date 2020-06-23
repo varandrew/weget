@@ -2,7 +2,7 @@
  * @Author: Varandrew
  * @Date: 2020-02-29 17:17:43
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-06-22 11:32:14
+ * @LastEditTime: 2020-06-23 16:40:28
  * @Description: file content
  */
 
@@ -46,7 +46,6 @@ export default function xhr(config: WegetRequesetConfig): WegetPromise {
         config,
         request
       }
-
       handleResponse(response)
     }
 

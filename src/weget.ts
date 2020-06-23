@@ -2,49 +2,23 @@
  * @Author: Varandrew
  * @Date: 2020-06-22 13:20:56
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-06-22 13:36:50
+ * @LastEditTime: 2020-06-22 17:59:10
  * @Description: file content
  */
 
-import { WegetRequesetConfig, WegetPromise, WegetResponse } from '@/types/index'
-import xhr from './adapters/xhr'
-import { buildUrl } from './helpers/url'
-import { transformRequest, parseResponse } from './helpers/data'
-import { processHeaders } from './helpers/headers'
+import { WegetInstance } from './types'
+import Weget from './core/Weget'
+import { extend } from './helpers/util'
 
-function weget(config: WegetRequesetConfig): WegetPromise {
-  processConfig(config)
+function createInstance(): WegetInstance {
+  const context = new Weget()
+  const instance = Weget.prototype.request.bind(context)
 
-  return xhr(config).then(res => {
-    return transformResponseData(res)
-  })
+  extend(instance, context)
+
+  return instance as WegetInstance
 }
 
-function processConfig(config: WegetRequesetConfig): void {
-  config.url = transformURL(config)
-  config.headers = transformHeaders(config)
-  config.data = transformRequestData(config)
-}
-
-function transformURL(config: WegetRequesetConfig): string {
-  const { url, params } = config
-
-  return buildUrl(url, params)
-}
-
-function transformRequestData(config: WegetRequesetConfig): any {
-  return transformRequest(config.data)
-}
-
-function transformHeaders(config: WegetRequesetConfig): any {
-  const { headers = {}, data } = config
-
-  return processHeaders(headers, data)
-}
-
-function transformResponseData(response: WegetResponse): WegetResponse {
-  response.data = parseResponse(response)
-  return response
-}
+const weget = createInstance()
 
 export default weget
