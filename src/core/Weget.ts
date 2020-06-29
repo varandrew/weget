@@ -2,15 +2,35 @@
  * @Author: Varandrew
  * @Date: 2020-06-22 16:21:21
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-06-23 15:24:00
+ * @LastEditTime: 2020-06-29 13:38:06
  * @Description: file content
  */
 
-import { WegetRequesetConfig, WegetPromise } from '../types'
+import { WegetRequesetConfig, WegetPromise, WegetResponse, ResolvedFn, RejectedFn } from '../types'
 import dispatchRequest from './dispatchRequest'
 import { Method } from '../constants'
+import InterceptorManager from './interceptorManger'
+
+interface Interceptors {
+  request: InterceptorManager<WegetRequesetConfig>
+  response: InterceptorManager<WegetResponse>
+}
+
+interface PromiseChain {
+  resolved: ResolvedFn | ((config: WegetRequesetConfig) => WegetPromise)
+  rejected?: RejectedFn
+}
 
 export default class Weget {
+  interceptors: Interceptors
+
+  public constructor() {
+    this.interceptors = {
+      request: new InterceptorManager<WegetRequesetConfig>(),
+      response: new InterceptorManager<WegetResponse>()
+    }
+  }
+
   public request(payload: any, config?: any): WegetPromise {
     if (typeof payload === 'string') {
       if (!config) {
@@ -20,7 +40,31 @@ export default class Weget {
     } else {
       config = payload
     }
-    return dispatchRequest(config)
+
+    const chain: PromiseChain[] = [
+      {
+        resolved: dispatchRequest,
+        rejected: undefined
+      }
+    ]
+
+    this.interceptors.request.forEach(interceptor => {
+      chain.unshift(interceptor)
+    })
+
+    this.interceptors.response.forEach(interceptor => {
+      chain.push(interceptor)
+    })
+
+    let promise = Promise.resolve(config)
+
+    while (chain.length) {
+      const { resolved, rejected } = chain.shift()!
+
+      promise = promise.then(resolved, rejected)
+    }
+
+    return promise
   }
 
   public get(url: string, config?: WegetRequesetConfig): WegetPromise {

@@ -2,7 +2,7 @@
  * @Author: Varandrew
  * @Date: 2020-04-17 15:06:31
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-06-23 11:49:12
+ * @LastEditTime: 2020-06-29 14:40:15
  * @Description: file content
  */
 
@@ -24,6 +24,8 @@ registerBaseRouter()
 registerErrorRouter()
 
 registerExtendRouter()
+
+registerInterceptorRouter()
 
 app.use(router)
 
@@ -140,5 +142,11 @@ function registerExtendRouter() {
         age: 18
       }
     })
+  })
+}
+
+function registerInterceptorRouter() {
+  router.get('/interceptor/get', function(req, res) {
+    res.end('hello')
   })
 }

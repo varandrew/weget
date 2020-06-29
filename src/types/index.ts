@@ -2,7 +2,7 @@
  * @Author: Varandrew
  * @Date: 2020-02-29 12:02:10
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-06-23 15:55:04
+ * @LastEditTime: 2020-06-29 15:12:23
  * @Description: file content
  */
 
@@ -38,6 +38,11 @@ export interface WegetError extends Error {
 }
 
 export interface Weget {
+  interceptors: {
+    request: WegetInterceptorManager<WegetRequesetConfig>
+    response: WegetInterceptorManager<WegetResponse>
+  }
+
   request<T = any>(config: WegetRequesetConfig): WegetPromise<T>
 
   get<T = any>(url: string, config?: WegetRequesetConfig): WegetPromise<T>
@@ -56,7 +61,22 @@ export interface Weget {
 }
 
 export interface WegetInstance extends Weget {
+  interceptors: any
   <T = any>(config: WegetRequesetConfig): WegetPromise<T>
 
   <T = any>(url: string, config?: WegetRequesetConfig): WegetPromise<T>
+}
+
+export interface WegetInterceptorManager<T> {
+  use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number
+
+  eject(id: number): void
+}
+
+export interface ResolvedFn<T = any> {
+  (val: T): T | Promise<T>
+}
+
+export interface RejectedFn {
+  (error: any): any
 }

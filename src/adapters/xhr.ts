@@ -2,7 +2,7 @@
  * @Author: Varandrew
  * @Date: 2020-02-29 17:17:43
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-06-23 16:40:28
+ * @LastEditTime: 2020-06-24 16:16:00
  * @Description: file content
  */
 
@@ -73,7 +73,7 @@ export default function xhr(config: WegetRequesetConfig): WegetPromise {
       } else {
         reject(
           createError(
-            `Request failed with status code${response.status}`,
+            `Request failed with status code ${response.status}`,
             config,
             null,
             request,
