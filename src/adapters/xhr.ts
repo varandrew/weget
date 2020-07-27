@@ -2,15 +2,15 @@
  * @Author: Varandrew
  * @Date: 2020-02-29 17:17:43
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-06-24 16:16:00
+ * @LastEditTime: 2020-07-27 16:50:03
  * @Description: file content
  */
 
-import { WegetRequesetConfig, WegetPromise, WegetResponse } from '@/types/index'
+import { WegetRequestConfig, WegetPromise, WegetResponse } from '@/types/index'
 import { parseHeaders } from '../helpers/headers'
 import { createError } from '../helpers/error'
 
-export default function xhr(config: WegetRequesetConfig): WegetPromise {
+export default function xhr(config: WegetRequestConfig): WegetPromise {
   return new Promise((resolve, reject) => {
     const { url, data = null, method = 'get', headers, responseType, timeout } = config
 
@@ -24,7 +24,7 @@ export default function xhr(config: WegetRequesetConfig): WegetPromise {
       request.timeout = timeout
     }
 
-    request.open(method.toUpperCase(), url, true)
+    request.open(method.toUpperCase(), url!, true)
 
     request.onreadystatechange = function loadHandler() {
       if (request.readyState !== 4) {

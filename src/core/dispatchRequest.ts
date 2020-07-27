@@ -2,17 +2,18 @@
  * @Author: Varandrew
  * @Date: 2020-06-22 13:20:56
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-06-24 16:06:56
+ * @LastEditTime: 2020-07-27 16:29:09
  * @Description: file content
  */
 
-import { WegetRequesetConfig, WegetPromise, WegetResponse } from '@/types/index'
 import xhr from '../adapters/xhr'
+import transform from './transform'
 import { buildUrl } from '../helpers/url'
+import { flattenHeaders } from '../helpers/headers'
 import { transformRequest, parseResponse } from '../helpers/data'
-import { processHeaders } from '../helpers/headers'
+import { WegetRequestConfig, WegetPromise, WegetResponse } from '@/types/index'
 
-export default function dispatchRequest(config: WegetRequesetConfig): WegetPromise {
+export default function dispatchRequest(config: WegetRequestConfig): WegetPromise {
   processConfig(config)
 
   return xhr(config).then(res => {
@@ -20,29 +21,20 @@ export default function dispatchRequest(config: WegetRequesetConfig): WegetPromi
   })
 }
 
-function processConfig(config: WegetRequesetConfig): void {
+function processConfig(config: WegetRequestConfig): void {
   config.url = transformURL(config)
-  config.headers = transformHeaders(config)
-  config.data = transformRequestData(config)
+  config.data = transform(config.data, config.headers, config.transformRequest!)
+  config.headers = flattenHeaders(config.headers, config.method!)
 }
 
-function transformURL(config: WegetRequesetConfig): string {
+function transformURL(config: WegetRequestConfig): string {
   const { url, params } = config
 
-  return buildUrl(url, params)
-}
-
-function transformRequestData(config: WegetRequesetConfig): any {
-  return transformRequest(config.data)
-}
-
-function transformHeaders(config: WegetRequesetConfig): any {
-  const { headers = {}, data } = config
-
-  return processHeaders(headers, data)
+  return buildUrl(url!, params)
 }
 
 function transformResponseData(response: WegetResponse): WegetResponse {
-  response.data = parseResponse(response.data)
+  response.data = transform(response.data, response.headers, response.config.transformResponse!)
+
   return response
 }

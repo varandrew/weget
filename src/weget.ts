@@ -2,16 +2,17 @@
  * @Author: Varandrew
  * @Date: 2020-06-22 13:20:56
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-06-22 17:59:10
+ * @LastEditTime: 2020-07-24 17:06:07
  * @Description: file content
  */
 
-import { WegetInstance } from './types'
 import Weget from './core/Weget'
+import defaults from './default'
 import { extend } from './helpers/util'
+import { WegetInstance, WegetRequestConfig } from './types'
 
-function createInstance(): WegetInstance {
-  const context = new Weget()
+function createInstance(config: WegetRequestConfig): WegetInstance {
+  const context = new Weget(config)
   const instance = Weget.prototype.request.bind(context)
 
   extend(instance, context)
@@ -19,6 +20,6 @@ function createInstance(): WegetInstance {
   return instance as WegetInstance
 }
 
-const weget = createInstance()
+const weget = createInstance(defaults)
 
 export default weget

@@ -2,31 +2,34 @@
  * @Author: Varandrew
  * @Date: 2020-06-22 16:21:21
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-06-29 13:38:06
+ * @LastEditTime: 2020-06-29 17:29:25
  * @Description: file content
  */
 
-import { WegetRequesetConfig, WegetPromise, WegetResponse, ResolvedFn, RejectedFn } from '../types'
+import { WegetRequestConfig, WegetPromise, WegetResponse, ResolvedFn, RejectedFn } from '../types'
 import dispatchRequest from './dispatchRequest'
 import { Method } from '../constants'
 import InterceptorManager from './interceptorManger'
+import mergeConfig from './mergeConfig'
 
 interface Interceptors {
-  request: InterceptorManager<WegetRequesetConfig>
+  request: InterceptorManager<WegetRequestConfig>
   response: InterceptorManager<WegetResponse>
 }
 
 interface PromiseChain {
-  resolved: ResolvedFn | ((config: WegetRequesetConfig) => WegetPromise)
+  resolved: ResolvedFn | ((config: WegetRequestConfig) => WegetPromise)
   rejected?: RejectedFn
 }
 
 export default class Weget {
+  defaults: WegetRequestConfig
   interceptors: Interceptors
 
-  public constructor() {
+  public constructor(initConfig: WegetRequestConfig) {
+    this.defaults = initConfig
     this.interceptors = {
-      request: new InterceptorManager<WegetRequesetConfig>(),
+      request: new InterceptorManager<WegetRequestConfig>(),
       response: new InterceptorManager<WegetResponse>()
     }
   }
@@ -40,6 +43,8 @@ export default class Weget {
     } else {
       config = payload
     }
+
+    config = mergeConfig(this.defaults, config)
 
     const chain: PromiseChain[] = [
       {
@@ -67,33 +72,33 @@ export default class Weget {
     return promise
   }
 
-  public get(url: string, config?: WegetRequesetConfig): WegetPromise {
+  public get(url: string, config?: WegetRequestConfig): WegetPromise {
     return this._requestMethodWithoutData('get', url, config)
   }
 
-  public delete(url: string, config?: WegetRequesetConfig): WegetPromise {
+  public delete(url: string, config?: WegetRequestConfig): WegetPromise {
     return this._requestMethodWithoutData('delete', url, config)
   }
 
-  public head(url: string, config?: WegetRequesetConfig): WegetPromise {
+  public head(url: string, config?: WegetRequestConfig): WegetPromise {
     return this._requestMethodWithoutData('head', url, config)
   }
 
-  public options(url: string, config?: WegetRequesetConfig): WegetPromise {
+  public options(url: string, config?: WegetRequestConfig): WegetPromise {
     return this._requestMethodWithoutData('options', url, config)
   }
 
-  public post(url: string, data?: any, config?: WegetRequesetConfig): WegetPromise {
+  public post(url: string, data?: any, config?: WegetRequestConfig): WegetPromise {
     return this._requestMethodWithData('post', url, data, config)
   }
-  public put(url: string, data?: any, config?: WegetRequesetConfig): WegetPromise {
+  public put(url: string, data?: any, config?: WegetRequestConfig): WegetPromise {
     return this._requestMethodWithData('post', url, data, config)
   }
-  public patch(url: string, data?: any, config?: WegetRequesetConfig): WegetPromise {
+  public patch(url: string, data?: any, config?: WegetRequestConfig): WegetPromise {
     return this._requestMethodWithData('post', url, data, config)
   }
 
-  private _requestMethodWithoutData(method: Method, url: string, config?: WegetRequesetConfig) {
+  private _requestMethodWithoutData(method: Method, url: string, config?: WegetRequestConfig) {
     return this.request(Object.assign(config || {}, { method, url }))
   }
 
@@ -101,7 +106,7 @@ export default class Weget {
     method: Method,
     url: string,
     data?: any,
-    config?: WegetRequesetConfig
+    config?: WegetRequestConfig
   ) {
     return this.request(Object.assign(config || {}, { method, url, data }))
   }

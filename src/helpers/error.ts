@@ -6,18 +6,18 @@
  * @Description: file content
  */
 
-import { WegetRequesetConfig, WegetResponse } from '@/types/index'
+import { WegetRequestConfig, WegetResponse } from '@/types/index'
 
 export class WegetError extends Error {
   isWegetError: boolean
-  config: WegetRequesetConfig
+  config: WegetRequestConfig
   code?: string | null
   request?: any
   response?: WegetResponse
 
   public constructor(
     message: string,
-    config: WegetRequesetConfig,
+    config: WegetRequestConfig,
     code?: string | null,
     request?: any,
     response?: WegetResponse
@@ -36,7 +36,7 @@ export class WegetError extends Error {
 
 export function createError(
   message: string,
-  config: WegetRequesetConfig,
+  config: WegetRequestConfig,
   code?: string | null,
   request?: any,
   response?: WegetResponse
