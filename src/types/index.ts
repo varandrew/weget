@@ -2,7 +2,7 @@
  * @Author: Varandrew
  * @Date: 2020-02-29 12:02:10
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-07-24 16:20:28
+ * @LastEditTime: 2020-07-30 17:42:00
  * @Description: file content
  */
 
@@ -70,6 +70,10 @@ export interface WegetInstance extends Weget {
   <T = any>(config: WegetRequestConfig): WegetPromise<T>
 
   <T = any>(url: string, config?: WegetRequestConfig): WegetPromise<T>
+}
+
+export interface WegetStatic extends WegetInstance {
+  create(config?: WegetRequestConfig): WegetInstance
 }
 
 export interface WegetInterceptorManager<T> {
