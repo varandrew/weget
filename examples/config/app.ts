@@ -2,7 +2,7 @@
  * @Author: Varandrew
  * @Date: 2020-07-09 13:38:20
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-07-27 16:51:05
+ * @LastEditTime: 2020-08-20 14:02:09
  * @Description: file content
  */
 
@@ -38,6 +38,34 @@ weget({
       return data
     }
   ],
+  url: '/config/post',
+  method: 'post',
+  data: {
+    a: 1
+  }
+}).then(res => {
+  console.log(res.data)
+})
+
+const instance = weget.create({
+  transformRequest: [
+    function(data) {
+      return qs.stringify(data)
+    },
+    ...(weget.defaults.transformRequest as WegetTransformer[])
+  ],
+  transformResponse: [
+    ...(weget.defaults.transformResponse as WegetTransformer[]),
+    function(data) {
+      if (typeof data === 'object') {
+        data.b = 2
+      }
+      return data
+    }
+  ]
+})
+
+instance({
   url: '/config/post',
   method: 'post',
   data: {

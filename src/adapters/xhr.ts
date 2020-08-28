@@ -2,7 +2,7 @@
  * @Author: Varandrew
  * @Date: 2020-02-29 17:17:43
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-08-20 10:09:24
+ * @LastEditTime: 2020-08-27 11:12:48
  * @Description: file content
  */
 
@@ -12,7 +12,7 @@ import { createError } from '../helpers/error'
 
 export default function xhr(config: WegetRequestConfig): WegetPromise {
   return new Promise((resolve, reject) => {
-    const { url, data = null, method = 'get', headers, responseType, timeout } = config
+    const { url, data = null, method = 'get', headers, responseType, timeout, cancelToken } = config
 
     const request = new XMLHttpRequest()
 
@@ -22,6 +22,13 @@ export default function xhr(config: WegetRequestConfig): WegetPromise {
 
     if (timeout) {
       request.timeout = timeout
+    }
+
+    if (cancelToken) {
+      cancelToken.promise.then(reason => {
+        request.abort()
+        reject(reason)
+      })
     }
 
     request.open(method.toUpperCase(), url!, true)

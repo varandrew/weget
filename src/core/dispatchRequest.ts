@@ -2,7 +2,7 @@
  * @Author: Varandrew
  * @Date: 2020-06-22 13:20:56
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-07-27 16:29:09
+ * @LastEditTime: 2020-08-28 15:35:24
  * @Description: file content
  */
 
@@ -37,4 +37,10 @@ function transformResponseData(response: WegetResponse): WegetResponse {
   response.data = transform(response.data, response.headers, response.config.transformResponse!)
 
   return response
+}
+
+function throwIfCancellationRequested(config: WegetRequestConfig): void {
+  if (config.cancelToken) {
+    config.cancelToken.throwIfRequested()
+  }
 }

@@ -2,7 +2,7 @@
  * @Author: Varandrew
  * @Date: 2020-04-17 15:06:31
  * @LastEditors: Varandrew
- * @LastEditTime: 2020-07-27 16:49:11
+ * @LastEditTime: 2020-08-28 15:51:09
  * @Description: file content
  */
 
@@ -44,6 +44,8 @@ registerExtendRouter()
 registerInterceptorRouter()
 
 registerConfigRouter()
+
+registerCancelRouter()
 
 app.use(router)
 
@@ -156,5 +158,19 @@ function registerInterceptorRouter() {
 function registerConfigRouter() {
   router.post('/config/post', function(req, res) {
     res.json(req.body)
+  })
+}
+
+function registerCancelRouter() {
+  router.get('/cancel/get', function(req, res) {
+    setTimeout(() => {
+      res.json('hello')
+    }, 1000)
+  })
+
+  router.post('/cancel/post', function(req, res) {
+    setTimeout(() => {
+      res.json(req.body)
+    }, 1000)
   })
 }
